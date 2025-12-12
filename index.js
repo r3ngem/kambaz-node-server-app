@@ -10,26 +10,36 @@ import ModulesRoutes from './Kambaz/Modules/routes.js';
 import AssignmentsRoutes from './Kambaz/Assignments/routes.js';
 import "dotenv/config";
 import session from "express-session";
+
 const CONNECTION_STRING = process.env.DATABASE_CONNECTION_STRING || "mongodb+srv://rengem:Va05beach@kambaz.c9tatn7.mongodb.net/?appName=Kambaz"
 mongoose.connect(CONNECTION_STRING);
+
 const app = express();
+
 app.use(cors({
-    credentials: true,
-   origin: process.env.CLIENT_URL || "http://localhost:3000"
+  credentials: true,
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type"]
 }));
+
 const sessionOptions = {
   secret: process.env.SESSION_SECRET || "kambaz",
   resave: false,
   saveUninitialized: false,
+  cookie: {
+    secure: process.env.SERVER_ENV !== "development",
+    httpOnly: true,
+    sameSite: process.env.SERVER_ENV !== "development" ? "none" : "lax",
+    maxAge: 1000 * 60 * 60 * 24
+  }
 };
+
 if (process.env.SERVER_ENV !== "development") {
   sessionOptions.proxy = true;
-  sessionOptions.cookie = {
-    sameSite: "none",
-    secure: true,
-    domain: process.env.SERVER_URL,
-  };
+  sessionOptions.cookie.domain = process.env.SERVER_URL;
 }
+
 app.use(session(sessionOptions));
 app.use(express.json());  
 UserRoutes(app, db);
