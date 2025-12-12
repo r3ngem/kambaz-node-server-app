@@ -13,6 +13,9 @@ import session from "express-session";
 
 const CONNECTION_STRING = process.env.DATABASE_CONNECTION_STRING || "mongodb+srv://rengem:Va05beach@kambaz.c9tatn7.mongodb.net/?appName=Kambaz"
 mongoose.connect(CONNECTION_STRING);
+mongoose.connection.on('connected', () => {
+  console.log("Mongoose connected to:", mongoose.connection.name);
+});
 
 const app = express();
 
