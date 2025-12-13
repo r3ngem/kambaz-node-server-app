@@ -32,6 +32,7 @@ async function createModule(courseId, module) {
 
  async function findModulesForCourse(courseId) {
    const course = await model.findById(courseId);
+   console.log("courseId param:", req.params.courseId);
    return course.modules;
  }
 
