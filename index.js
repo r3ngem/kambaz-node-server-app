@@ -49,6 +49,7 @@ UserRoutes(app, db);
 CourseRoutes(app, db);
 ModulesRoutes(app, db);
 AssignmentsRoutes(app, db);
+EnrollmentRoutes(app, db);
 Lab5(app)
 Hello(app)
 app.listen(process.env.PORT || 4000)
