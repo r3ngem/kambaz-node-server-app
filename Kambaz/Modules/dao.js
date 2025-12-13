@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import model from "./model.js";
 
 export default function ModulesDao() {
@@ -7,7 +8,7 @@ export default function ModulesDao() {
   };
 
   const createModule = async (courseId, module) => {
-    return await model.create({ ...module, course: courseId });
+    return await model.create({ _id: uuidv4(), ...module, course: courseId });
   };
 
   const deleteModule = async (moduleId) => {
