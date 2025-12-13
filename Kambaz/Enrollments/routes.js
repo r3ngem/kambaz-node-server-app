@@ -50,4 +50,25 @@ export default function EnrollmentRoutes(app, db) {
       res.status(500).json({ message: "Error fetching available courses" });
     }
   });
+
+  app.delete("/api/enrollments/:courseId/users/:userId", async (req, res) => {
+  try {
+    const { courseId, userId } = req.params;
+
+    await enrollmentsDao.unenrollUserFromCourse(userId, courseId);
+
+    const user = await usersDao.findUserById(userId);
+    user.enrolledCourses = (user.enrolledCourses || []).filter(id => id !== courseId);
+    await usersDao.updateUser(userId, { enrolledCourses: user.enrolledCourses });
+
+    if (req.session.currentUser && req.session.currentUser._id === userId) {
+      req.session.currentUser = user;
+    }
+
+    res.json({ message: "Unenrolled successfully", enrolledCourses: user.enrolledCourses });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error during unenrollment" });
+  }
+});
 }
