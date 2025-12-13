@@ -28,7 +28,7 @@ const deleteModule = async (req, res) => {
   const status = await dao.deleteModule(moduleId);
   res.json(status);
 };
-
+  
 
   app.put("/api/modules/:moduleId", updateModule);
   app.delete("/api/modules/:moduleId", deleteModule);
